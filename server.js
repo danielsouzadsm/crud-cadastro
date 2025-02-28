@@ -21,7 +21,7 @@ function GetUsuarios(){
     }
 }
 
-function postUsuarios(){
+function postUsuarios(usuarios){
     fs.writeFileSync(arquivo, JSON.stringify(usuarios, null, 2))
 }
  
@@ -32,9 +32,10 @@ app.get('/usuarios', (req, res) => {
 });
 
 app.post('/usuarios', (req, res) => {
+    console.log("Recebendo dados:", req.body);
     const { nome, sobrenome, idade } = req.body;
     usuarios.push({nome, sobrenome, idade})
-    postUsuarios()
+    postUsuarios(usuarios)
 
     return res.json(usuarios);
 });
@@ -42,11 +43,19 @@ app.post('/usuarios', (req, res) => {
 
 app.put('/usuarios/:index',(req, res) => {
     const index = parseInt(req.params.index);
-    const {nome} = req.body;
+    const {nome, sobrenome, idade} = req.body;
     
-    usuarios[index] = {nome}
-    postUsuarios();
-    return res.json(usuarios)
+if(usuarios[index]) {
+    usuarios[index] = {
+        nome: nome ?? usuarios[index].nome,
+        sobrenome: sobrenome ?? usuarios[index].sobrenome,
+        idade: idade ?? usuarios[index].idade
+    };
+    postUsuarios(usuarios);
+    return res.json(usuarios);
+}else
+    return res.status(404).json({ error: "Usuário não encontrado" });
+
 });
 
 app.delete('/usuarios/:index',(req,res) => {

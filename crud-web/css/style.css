@@ -23,3 +23,11 @@
 .btnCadastro:hover{
     background-color: #00ffc8;
 }
+.btn-warning{
+    background-color: #36c2d8;
+    border: #36c2d8;
+}
+
+.btn-warning:hover{
+    background-color: #02adc7;
+}

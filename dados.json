@@ -1,17 +1,7 @@
 [
   {
-    "nome": "guilherme",
-    "sobrenome": "Santos",
-    "idade": "22"
-  },
-  {
-    "nome": "Daniel",
-    "sobrenome": "Souza",
-    "idade": "26"
-  },
-  {
-    "nome": "Joao Paulo",
-    "sobrenome": "Souza Menezes",
+    "nome": "joao Paulo",
+    "sobrenome": "souza",
     "idade": "20"
   }
 ]

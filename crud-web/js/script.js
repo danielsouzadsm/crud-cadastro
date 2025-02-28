@@ -1,5 +1,8 @@
 const apiServer = 'http://localhost:3000/usuarios';
 
+const btnSalvar = document.getElementById("salvar");
+const btnSalvarEdit = document.getElementById("btnEditSalvar");
+
 async function carregarUsuarios() {
     try{
         const res = await fetch(apiServer);
@@ -21,20 +24,30 @@ async function carregarUsuarios() {
             tdIdade.innerText = `${usuario.idade} anos`;
             
             const tdAcao = document.createElement('td');
-            const btnDelete = document.createElement('button');
 
-            btnDelete.innerText = 'Delete';
+            const btnEdit = document.createElement('button');
+            btnEdit.innerText = '✏️';
+            btnEdit.classList.add('btn','btn-edit','btn-warning', 'btn-sm', 'me-2');
+            btnEdit.setAttribute('data-bs-toggle', 'modal');
+            btnEdit.setAttribute('data-bs-target', '#modalEditar');
+            btnEdit.addEventListener('click', () => {
+                pegarValorInput(usuario, index)
+            });
+
+            const btnDelete = document.createElement('button');
+            btnDelete.innerText = '🗑️';
             btnDelete.classList.add('btn','btn-danger', 'btn-sm')
 
             btnDelete.addEventListener('click',()=>{
                 deletarUsuario(index);
             });
 
-            tdAcao.appendChild(btnDelete);
             tr.appendChild(tdNome);
             tr.appendChild(tdSobrenome);
             tr.appendChild(tdIdade);
             tr.appendChild(tdAcao);
+            tdAcao.appendChild(btnEdit)
+            tdAcao.appendChild(btnDelete);
             resultados.appendChild(tr);
 
         });
@@ -42,14 +55,32 @@ async function carregarUsuarios() {
         console.error('erro ao carregar usuarios', error);
     }
 }
+
+function pegarValorInput(usuario, index) {
+    console.log(usuario)
+    const editNome = document.getElementById('editNome')
+    const editSobrenome = document.getElementById('editSobrenome')
+    const editIdade = document.getElementById('editIdade')
+    const editIndex = document.getElementById('editIndex')
+
+    editNome.value = usuario.nome;
+    editSobrenome.value = usuario.sobrenome;
+    editIdade.value = usuario.idade;
+    editIndex.value = index;
+}
 async function salvarUsuarios() {
-    const nome = document.getElementById('nome').value;
-    const sobrenome = document.getElementById('sobrenome').value;
-    const idade = document.getElementById('idade').value;
+    const inputNome = document.getElementById('nome');
+    const inputSobrenome = document.getElementById('sobrenome');
+    const inputIdade = document.getElementById('idade');
+
+    const nome = inputNome.value
+    const sobrenome = inputSobrenome.value
+    const idade = inputIdade.value
+
+
     if(!nome || !sobrenome || !idade){
         alert('Preencha os campos')
         return
-        
     }
 
     await fetch(apiServer,{
@@ -64,8 +95,6 @@ async function salvarUsuarios() {
     carregarUsuarios();
 }
 
-
-
 async function deletarUsuario(index) {
     await fetch(`${apiServer}/${index}`, {
         method: "DELETE"
@@ -73,8 +102,30 @@ async function deletarUsuario(index) {
     carregarUsuarios();
 }
 
-
-const btnSalvar = document.getElementById("salvar")
+async function atualizarUsuario() {
+    const index = document.getElementById('editIndex').value;
+    const nome = document.getElementById('editNome').value;
+    const sobrenome = document.getElementById('editSobrenome').value;
+    const idade = document.getElementById('editIdade').value;
+    
+    if (!nome || !sobrenome || !idade) {
+        alert('Preencha todos os campos');
+        return;
+    }
+    
+    await fetch(`${apiServer}/${index}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, sobrenome, idade })
+    });
+    
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditar'));
+    modal.hide();
+    carregarUsuarios();
+}
+btnSalvarEdit.addEventListener('click', ()=>{
+    atualizarUsuario();
+});
 
 btnSalvar.addEventListener('click', ()=>{
     salvarUsuarios();
