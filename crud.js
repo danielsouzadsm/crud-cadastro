@@ -32,7 +32,6 @@ app.get('/usuarios', (req, res) => {
 });
 
 app.post('/usuarios', (req, res) => {
-    console.log("Recebendo dados:", req.body);
     const { nome, sobrenome, idade } = req.body;
     usuarios.push({nome, sobrenome, idade})
     postUsuarios(usuarios)
@@ -62,7 +61,7 @@ app.delete('/usuarios/:index',(req,res) => {
     const index = parseInt(req.params.index);
     
     usuarios.splice(index, 1);
-    postUsuarios();
+    postUsuarios(usuarios);
     return res.json({message: 'O usuario foi deletado!'});
 });
 

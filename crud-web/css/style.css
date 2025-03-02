@@ -5,29 +5,37 @@
     box-sizing: border-box;
     list-style: none;
 }
+body{
+    background-color: #e4f6f7cb;
+}
 .cabecalho{
     box-shadow: 1px 2px 2px 2px rgba(43, 42, 42, 0.863);
     border-radius: 0 0 10px 10px;
 }
-.modal-body{
-    min-height: 200px;
-}
-.btnCadastro{
-    background-color: #9bffe9;
-    border: none;
+
+.btn-primary{
+    background-color: #9bffe9 !important;
+    border: none; 
     padding: 8px;
     font-weight: 500;
     border-radius: 10px 10px 10px 10px;
     transition: 0.3s ease-in-out;
 }
-.btnCadastro:hover{
-    background-color: #00ffc8;
+.btn-primary:focus, .btn-primary:active {
+    outline: none ;
+    box-shadow: none ;
+}
+.btn-primary:hover{
+    background-color: #00ffc8 !important;
+}
+.btn-warning:focus, .btn-warning:active {
+    outline: none ;
+    box-shadow: none ;
 }
 .btn-warning{
-    background-color: #36c2d8;
+    background-color: #36c2d8 !important;
     border: #36c2d8;
 }
-
 .btn-warning:hover{
     background-color: #02adc7;
 }
