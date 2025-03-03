@@ -22,6 +22,8 @@ ligar.connect(error => {
         console.error('MySQL conectado!')
 });
 
+app.get('/favicon.ico', (req, res) => res.status(204));
+
 app.get('/usuarios', (req, res) => {
     ligar.query('SELECT * FROM usuarios', (error, results) => {
         if (error) {

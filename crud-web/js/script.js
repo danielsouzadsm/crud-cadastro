@@ -63,8 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnConfirmarDelete = document.getElementById("confirmarDelete");
     let usuarioParaExcluir = null
 
-    function abrirModalExcluir(index) {
-        usuarioParaExcluir = index;
+    function abrirModalExcluir(id) {
+        usuarioParaExcluir = id;
         modalConfirmarDelete.show();
     };
     document.getElementById('confirmarDelete').addEventListener('click', () => {
@@ -91,9 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             resultados.innerText = '';
 
-            usuarios.forEach((usuario, index) => {
+            usuarios.forEach((usuario, id) => {
                 const tr = document.createElement('tr');
-                tr.classList.add('table-light')
 
                 const tdNome = document.createElement('td');
                 tdNome.innerText = usuario.nome;
@@ -113,14 +112,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnEdit.setAttribute('data-bs-toggle', 'modal');
                 btnEdit.setAttribute('data-bs-target', '#modalEditar');
                 btnEdit.addEventListener('click', () => {
-                    pegarValorInput(usuario, index)
+                    pegarValorInput(usuario, usuario.id)
                 });
 
                 const btnDelete = document.createElement('button');
                 btnDelete.innerText = '🗑️';
                 btnDelete.classList.add('btn', 'btn-danger', 'btn-sm')
                 btnDelete.addEventListener('click', () => {
-                    abrirModalExcluir(index)
+                    abrirModalExcluir(usuario.id)
                 })
 
                 tr.appendChild(tdNome);
@@ -137,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function pegarValorInput(usuario, index) {
+    function pegarValorInput(usuario, id) {
         const editNome = document.getElementById('editNome')
         const editSobrenome = document.getElementById('editSobrenome')
         const editIdade = document.getElementById('editIdade')
@@ -146,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         editNome.value = usuario.nome;
         editSobrenome.value = usuario.sobrenome;
         editIdade.value = usuario.idade;
-        editIndex.value = index;
+        editIndex.value = id;
     }
 
     async function salvarUsuarios() { 
@@ -180,15 +179,15 @@ document.addEventListener('DOMContentLoaded', () => {
         carregarUsuarios();
     }
 
-    async function deletarUsuario(index) {
-        await fetch(`${apiServer}/${index}`, {
+    async function deletarUsuario(id) {
+        await fetch(`${apiServer}/${id}`, {
             method: "DELETE"
         });
         carregarUsuarios();
     }
 
     async function atualizarUsuario() {
-        const index = document.getElementById('editIndex').value;
+        const id = document.getElementById('editIndex').value;
         const nome = document.getElementById('editNome').value;
         const sobrenome = document.getElementById('editSobrenome').value;
         const idade = document.getElementById('editIdade').value;
@@ -198,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        await fetch(`${apiServer}/${index}`, {
+        await fetch(`${apiServer}/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ nome, sobrenome, idade })
