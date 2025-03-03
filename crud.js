@@ -1,5 +1,4 @@
 let express = require('express');
-const fs = require('fs');
 const db = require('mysql2')
 const app = express();
 const PORT = 3000;
@@ -23,8 +22,6 @@ ligar.connect(error => {
         console.error('MySQL conectado!')
 });
 
-app.get('/favicon.ico', (req, res) => res.status(204));
-
 app.get('/usuarios', (req, res) => {
     ligar.query('SELECT * FROM usuarios', (error, results) => {
         if (error) {
@@ -33,6 +30,19 @@ app.get('/usuarios', (req, res) => {
         return res.json(results);
     });
 
+});
+app.get('/usuarios/:id', (req,res) => {
+    const {id} = req.params;
+    const db = 'SELEcT * FROM usuarios WHERE id = ?'
+
+    ligar.query(db, [id], (error, result) => {
+        if(error){
+            return res.status(500).json({error:'Usuário nao encontrado!'});
+        }if (result.length === 0 ) {
+            return res.status(404).json({ error: 'Usuário não existe!' });
+        }
+        return res.json(result);
+    });
 });
 
 app.post('/usuarios', (req, res) => {
